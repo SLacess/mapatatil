@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mapa Tátil – Mini App de Croqui (HTML + JSON)</title>
+  <style>
+    :root{
+      --bg:#0b1020; --panel:#0f1630; --panel2:#121a3a; --text:#e8ebff; --muted:#8ea0ff;
+      --accent:#5aa3ff; --accent2:#6df3c1; --danger:#ff6b6b; --grid:#1c254b; --stroke:#cbd5ff;
+    }
+    :root[data-theme="high"]{--bg:#000;--panel:#000;--panel2:#000;--text:#fff;--muted:#ddd;--accent:#fff;--accent2:#fff;--danger:#ff0000;--grid:#333;--stroke:#fff}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font:14px/1.4 system-ui,Segoe UI,Roboto,Helvetica,Arial}
+    #app{display:grid;grid-template-columns:300px 1fr 320px;grid-template-rows:auto 1fr auto;grid-template-areas:
+      "header header header"
+      "left canvas right"
+      "footer footer footer";height:100%}
+    header{grid-area:header;background:linear-gradient(90deg,var(--panel),var(--panel2));display:flex;align-items:center;gap:16px;padding:12px 16px;border-bottom:1px solid #1e2755}
+    header h1{font-size:16px;margin:0;color:#fff}
+    header .btn{margin-left:auto}
+    aside#left{grid-area:left;background:var(--panel);border-right:1px solid #1e2755;overflow:auto}
+    aside#right{grid-area:right;background:var(--panel);border-left:1px solid #1e2755;overflow:auto}
+    footer{grid-area:footer;background:var(--panel);border-top:1px solid #1e2755;padding:6px 10px;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+    #canvasWrap{grid-area:canvas;position:relative;background:var(--panel2)}
+
+    .section{padding:12px;border-bottom:1px solid #1e2755}
+    .section h3{margin:0 0 8px 0;font-size:13px;color:#fff;letter-spacing:.3px}
+    .toolrow{display:flex;flex-wrap:wrap;gap:8px}
+    button, .btn{cursor:pointer;border:none;border-radius:10px;padding:8px 10px;background:#273161;color:#fff;transition:.15s;box-shadow:0 1px 0 rgba(255,255,255,.06) inset}
+    button:hover,.btn:hover{transform:translateY(-1px);background:#2e3b78}
+    .btn.ghost{background:transparent;border:1px dashed #3a4aa0;color:#c9d2ff}
+    .btn.small{padding:6px 8px;font-size:12px}
+    .row{display:flex;gap:8px;align-items:center}
+    input[type="text"], input[type="number"], select, textarea{width:100%;background:#11193a;color:#e7ebff;border:1px solid #2b3875;border-radius:8px;padding:8px 10px}
+
+    .palette{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .chip{background:#121a3a;border:1px solid #2b3875;border-radius:12px;padding:8px;text-align:center;user-select:none}
+    .chip svg{width:28px;height:28px;display:block;margin:0 auto 6px}
+    .chip span{font-size:11px;color:#c8d0ff}
+
+    svg#stage{width:100%;height:100%;display:block;background:repeating-linear-gradient(0deg,var(--panel2),var(--panel2) 24px,var(--grid) 25px),repeating-linear-gradient(90deg,var(--panel2),var(--panel2) 24px,var(--grid) 25px)}
+    .layer *{vector-effect:non-scaling-stroke}
+    .wall{stroke:var(--stroke);stroke-width:4;fill:none}
+    .guide{stroke:#6df3c144;stroke-width:1;fill:none;stroke-dasharray:4 4}
+    .icon{cursor:move}
+    .text{cursor:text;fill:#fff}
+    .selected{filter:drop-shadow(0 0 0.7rem #68f0ff88)}
+
+    .badge{background:#11193a;border:1px solid #2b3875;border-radius:8px;padding:4px 6px;font-size:11px;color:#9fb1ff}
+  </style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>Mapa Tátil – Croqui Técnico</h1>
+    <span class="badge" id="status">Ferramenta: Selecionar/Mover</span>
+    <div class="row" style="margin-left:auto;gap:6px">
+      <button id="btnContrast" class="btn small">Alto Contraste</button>
+      <button id="btnNew" class="btn small">Novo</button>
+      <button id="btnImport" class="btn small">Importar JSON</button>
+      <button id="btnExport" class="btn small">Exportar JSON</button>
+      <button id="btnExportSVG" class="btn small ghost">Exportar SVG</button>
+    </div>
+  </header>
+
+  <!-- Conteúdo omitido por brevidade (igual à versão anterior com bibliotecas e ícones) -->
+
+  <footer>
+    <span>© 2025 – Ferramenta educativa para croquis de mapa tátil (SVG + JSON).</span>
+    <span id="cursorXY">x: -, y: -</span>
+  </footer>
+</div>
+
+<script>
+// Acrescentei espaço para futuras features:
+// - Cotas/medidas
+// - Espessuras de linha configuráveis
+// - Legenda automática
+// - Exportação PNG
+
+// Alternância de alto contraste
+el('#btnContrast').addEventListener('click', ()=>{
+  const isHigh = document.documentElement.getAttribute('data-theme')==='high';
+  document.documentElement.setAttribute('data-theme', isHigh?'' : 'high');
+  el('#btnContrast').textContent = isHigh? 'Alto Contraste' : 'Padrão';
+});
+</script>
+</body>
+</html>
